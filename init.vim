@@ -1,9 +1,9 @@
-" Install this file by doing the following:
+" Install locations:
+"   Windows:
+"       %LOCALAPPDATA%\nvim\init.vim
 "
-"   1. Open Neovim
-"   2. Run :e $MYVIMRC
-"   3. Paste the contents of this file in
-"   4. Save and restart
+"   Linux:
+"       TBD
 
 " ==============================================================================
 " Environment Settings
@@ -47,7 +47,12 @@ endif
 " Vim Plug Installation
 
 if has('win32')
-    " TODO: implement
+    if empty(glob(expand('$LOCALAPPDATA/nvim/autoload/plug.vim')))
+        execute '!curl -fLo ' . $LOCALAPPDATA . '/nvim/autoload/plug.vim --create-dirs
+            \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
 elseif has('unix')
     if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
         silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
@@ -66,9 +71,9 @@ if has('win32')
     " default this to call 'python', which will be python 3 on my machines.
     let g:python3_host_prog = expand('python')
 
-    let pip = 'pip'
+    let g:pip = 'pip'
 elseif has('unix')
-    let pip = 'pip3'
+    let g:pip = 'pip3'
 endif
 
 " Disable python 2 since it has been end of lifed.
@@ -112,7 +117,7 @@ autocmd VimEnter * :hi illuminatedWord cterm=underline gui=underline
 
 " deoplete ---------------------------------------------------------------------
 function! DeopletePostInstall(info)
-    execute '!' . pip . ' install --user --upgrade pynvim'
+    execute '!' . g:pip . ' install --user --upgrade pynvim'
     execute 'UpdateRemotePlugins'
 endfunction
 
@@ -127,7 +132,7 @@ endif
 let g:deoplete#enable_at_startup = 1
 
 Plug 'deoplete-plugins/deoplete-jedi', {
-    \ 'do': ':!' . pip . ' install --user --upgrade jedi'
+    \ 'do': ':!' . g:pip . ' install --user --upgrade jedi'
 \ }
 
 " CtrlP ------------------------------------------------------------------------
