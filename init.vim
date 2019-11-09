@@ -3,7 +3,7 @@
 "       %LOCALAPPDATA%\nvim\init.vim
 "
 "   Linux:
-"       TBD
+"       ~/.config/nvim/init.vim
 
 " ==============================================================================
 " Environment Settings
@@ -30,7 +30,8 @@ endif
 
 " Lines of GUI settings file.
 let s:ginit = [
-    \ 'GuiPopupmenu 0'
+    \ 'GuiPopupmenu 0',
+    \ 'GuiFont! ProggyVector'
 \ ]
 
 function WriteGUISettings()
@@ -96,6 +97,14 @@ Plug 'nestorsalceda/vim-strip-trailing-whitespaces'
 Plug 'brooth/far.vim'
 Plug 'airblade/vim-rooter'
 
+" ale --------------------------------------------------------------------------
+function! AlePostInstall(info)
+    execute '!' . g:pip . ' install --user --upgrade mypy'
+    execute 'UpdateRemotePlugins'
+endfunction
+
+Plug 'dense-analysis/ale', {'do': function('AlePostInstall')}
+
 " vim-indent-guides ------------------------------------------------------------
 Plug 'nathanaelkane/vim-indent-guides'
 
@@ -122,7 +131,7 @@ function! DeopletePostInstall(info)
 endfunction
 
 if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': function('DeopletePostInstall')}
+  Plug 'Shougo/deoplete.nvim', {'do': function('DeopletePostInstall')}
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
