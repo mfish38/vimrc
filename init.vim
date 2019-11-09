@@ -1,3 +1,8 @@
+" The following are required before installation:
+" - git
+" - python 3
+" - Proggy Vector https://github.com/bluescan/proggyfonts
+"
 " Install locations:
 "   Windows:
 "       %LOCALAPPDATA%\nvim\init.vim
