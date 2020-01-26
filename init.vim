@@ -111,7 +111,8 @@ let g:rooter_patterns = [
     \ 'repos/',
     \ 'setup.py',
     \ 'web.config',
-    \ 'package.json'
+    \ 'package.json',
+    \ 'vim.root'
 \]
 
 let g:rooter_silent_chdir = 1
