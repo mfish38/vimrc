@@ -108,6 +108,7 @@ let g:rooter_patterns = [
     \ '.git/',
     \ 'tests/',
     \ 'src/',
+    \ 'repos/',
     \ 'setup.py',
     \ 'web.config',
     \ 'package.json'
