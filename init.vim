@@ -1,6 +1,7 @@
 " The following are required before installation:
 " - git
 " - python 3
+" - npm
 " - Proggy Vector https://github.com/bluescan/proggyfonts
 "
 " Install locations:
@@ -100,7 +101,24 @@ Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'mechatroner/rainbow_csv'
 Plug 'nestorsalceda/vim-strip-trailing-whitespaces'
 Plug 'brooth/far.vim'
+
+" vim-rooter -------------------------------------------------------------------
 Plug 'airblade/vim-rooter'
+let g:rooter_patterns = [
+    \ '.git/',
+    \ 'tests/',
+    \ 'src/',
+    \ 'setup.py',
+    \ 'web.config',
+    \ 'package.json'
+\]
+
+let g:rooter_silent_chdir = 1
+
+" coverage-highlight -----------------------------------------------------------
+Plug 'mgedmin/coverage-highlight.vim'
+
+let g:coverage_script = 'python -m coverage'
 
 " ale --------------------------------------------------------------------------
 function! AlePostInstall(info)
@@ -145,17 +163,21 @@ endif
 
 let g:deoplete#enable_at_startup = 1
 
+" Python
 Plug 'deoplete-plugins/deoplete-jedi', {
     \ 'do': ':!' . g:pip . ' install --user --upgrade jedi'
 \ }
+
+" Javascript
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 
 " CtrlP ------------------------------------------------------------------------
 Plug 'ctrlpvim/ctrlp.vim'
 
 if executable('rg')
-    set grepprg=rg\ --color=never
+    set grepprg=rg\ --vimgrep
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-    let g:ctrlp_use_caching = 0
+    " let g:ctrlp_use_caching = 0
 endif
 
 call plug#end()
@@ -176,26 +198,29 @@ set shiftwidth=4
 set expandtab
 
 " ==============================================================================
-" Gutter
-
-" Setup width rulers
-set colorcolumn=81
-
-" Highlight everything that goes beyond 80 characters
-call matchadd('ColorColumn', '\%>81v.\+', 100)
-
-" Setup line numbers to show absolute number for current line, and relative
-" for everything else.
-set number relativenumber
-
-" ==============================================================================
 " Bindings
 
 " Make ctrl + backspace delete previous word.
 inoremap <C-BS> <C-W>
 
+" Easier escape than <Esc> or <C-[>.
+noremap <C-;> <Esc>
+inoremap <C-;> <Esc>
+
+" OS copy paste shortcuts
+vnoremap <C-c> "+y
+inoremap <C-v> <C-r>+
+nnoremap <C-v> "+p
+
+" Faster and less stressfull command mode
+nnoremap <Space> :
+
 " ==============================================================================
 " Editor
+
+" Turn of swapfile as it causes a bunch of existing swapfile notifications,
+" and saving and commiting often lessens the need for it.
+set noswapfile
 
 " Ensure there is always at least 10 lines around the cursor.
 set scrolloff=10
@@ -210,7 +235,19 @@ set backspace=indent,eol,start
 " Search can be made case sensitive by prefixing with \C
 " set ignorecase
 
+" Setup width rulers
+set colorcolumn=81
+
+" Highlight everything that goes beyond 80 characters
+call matchadd('ColorColumn', '\%>81v.\+', 100)
+
+" Setup line numbers to show absolute number for current line, and relative
+" for everything else.
+set number relativenumber
+
 " ==============================================================================
 " Theme
 
+" TODO: move all color theme settings together, and use variables to define
+" pallete.
 colorscheme onedark
