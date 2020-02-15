@@ -37,7 +37,7 @@ endif
 " Lines of GUI settings file.
 let s:ginit = [
     \ 'GuiPopupmenu 0',
-    \ 'GuiFont! ProggyVector'
+    \ 'GuiFont! ProggyVector:h10'
 \ ]
 
 function WriteGUISettings()
@@ -104,6 +104,7 @@ Plug 'brooth/far.vim'
 
 " vim-rooter -------------------------------------------------------------------
 Plug 'airblade/vim-rooter'
+
 let g:rooter_patterns = [
     \ '.git/',
     \ 'tests/',
@@ -176,13 +177,26 @@ Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 " CtrlP ------------------------------------------------------------------------
 Plug 'ctrlpvim/ctrlp.vim'
 
+let g:ctrlp_by_filename = 1
+
 if executable('rg')
-    set grepprg=rg\ --vimgrep
+    set grepprg=rg\ --color=never\ --auto-hybrid-regex
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
     " let g:ctrlp_use_caching = 0
 endif
 
 call plug#end()
+
+" ==============================================================================
+" Git
+
+command! -bar Ga execute "!git add " . shellescape(expand('%'))
+command! -bar -nargs=1 Gc execute "!git commit -m " . shellescape(<f-args>)
+command! -bar -nargs=1 Gac execute "Ga | Gc " . <q-args>
+command! Gs execute "!git status"
+command! Gr execute "!git reset HEAD"
+command! Gp execute "!git pull && git push"
+command! Gd execute "!git diff"
 
 " ==============================================================================
 " Indent
@@ -206,16 +220,54 @@ set expandtab
 inoremap <C-BS> <C-W>
 
 " Easier escape than <Esc> or <C-[>.
-noremap <C-;> <Esc>
 inoremap <C-;> <Esc>
+noremap <C-;> <Esc>
+cnoremap <C-;> <Esc>
 
 " OS copy paste shortcuts
 vnoremap <C-c> "+y
 inoremap <C-v> <C-r>+
-nnoremap <C-v> "+p
 
 " Faster and less stressfull command mode
 nnoremap <Space> :
+vnoremap <Space> :
+
+let g:ctrlp_prompt_mappings = {
+    \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>', '<c-;>'],
+\ }
+    " \ 'PrtBS()':              ['<bs>', '<c-]>'],
+    " \ 'PrtDelete()':          ['<del>'],
+    " \ 'PrtDeleteWord()':      ['<c-w>'],
+    " \ 'PrtClear()':           ['<c-u>'],
+    " \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
+    " \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+    " \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+    " \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+    " \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+    " \ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+    " \ 'PrtHistory(-1)':       ['<c-n>'],
+    " \ 'PrtHistory(1)':        ['<c-p>'],
+    " \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+    " \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
+    " \ 'AcceptSelection("t")': ['<c-t>'],
+    " \ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+    " \ 'ToggleFocus()':        ['<s-tab>'],
+    " \ 'ToggleRegex()':        ['<c-r>'],
+    " \ 'ToggleByFname()':      ['<c-d>'],
+    " \ 'ToggleType(1)':        ['<c-f>', '<c-up>'],
+    " \ 'ToggleType(-1)':       ['<c-b>', '<c-down>'],
+    " \ 'PrtExpandDir()':       ['<tab>'],
+    " \ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+    " \ 'PrtInsert()':          ['<c-\>'],
+    " \ 'PrtCurStart()':        ['<c-a>'],
+    " \ 'PrtCurEnd()':          ['<c-e>'],
+    " \ 'PrtCurLeft()':         ['<c-h>', '<left>', '<c-^>'],
+    " \ 'PrtCurRight()':        ['<c-l>', '<right>'],
+    " \ 'PrtClearCache()':      ['<F5>'],
+    " \ 'PrtDeleteEnt()':       ['<F7>'],
+    " \ 'CreateNewFile()':      ['<c-y>'],
+    " \ 'MarkToOpen()':         ['<c-z>'],
+    " \ 'OpenMulti()':          ['<c-o>'],
 
 " ==============================================================================
 " Editor
