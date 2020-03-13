@@ -199,6 +199,47 @@ command! Gp execute "!git pull && git push"
 command! Gd execute "!git diff"
 
 " ==============================================================================
+" Blocks
+
+command! Generate execute 'normal!
+    \/%%%%<enter>NjVnk
+    \:Commentary<enter>
+    \/%%%%<enter>NVnn
+    \:''<,''>!python -c "
+        \import sys;
+        \stdin = sys.stdin.read().splitlines();
+        \separator = stdin[0];
+        \code = ''\n''.join(stdin[1:stdin[1:].index(separator)+1]);
+        \print(separator);
+        \print(code);
+        \print(separator);
+        \exec(code);
+        \print(separator);
+    \"<enter>
+    \jVnk
+    \:Commentary<enter>
+    \:noh<enter>
+\'
+
+command! RunBlock execute 'normal!
+    \/%%%%<enter>NVnn
+    \:''<,''>!python -c "
+        \import sys;
+        \stdin = sys.stdin.read().splitlines();
+        \separator = stdin[0];
+        \code = ''\n''.join(stdin[1:stdin[1:].index(separator)+1]);
+        \print(separator);
+        \print(code);
+        \print(separator);
+        \exec(code);
+        \print(separator);
+    \"<enter>
+    \nnjVnk
+    \:Commentary<enter>
+    \:noh<enter>
+\'
+
+" ==============================================================================
 " Indent
 
 " Visual spaces per tab
