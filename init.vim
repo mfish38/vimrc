@@ -201,27 +201,24 @@ command! Gd execute "!git diff"
 " ==============================================================================
 " Blocks
 
-command! Generate execute 'normal!
-    \/%%%%<enter>NjVnk
+command! BlockAdd execute 'normal! i%%%%<enter><enter>%%%%<enter>%%%%<esc>kk'
+
+command! BlockComment execute 'normal!
+    \/.*%%%%<enter>NVn
     \:Commentary<enter>
-    \/%%%%<enter>NVnn
-    \:''<,''>!python -c "
-        \import sys;
-        \stdin = sys.stdin.read().splitlines();
-        \separator = stdin[0];
-        \code = ''\n''.join(stdin[1:stdin[1:].index(separator)+1]);
-        \print(separator);
-        \print(code);
-        \print(separator);
-        \exec(code);
-        \print(separator);
-    \"<enter>
-    \jVnk
+    \nn
     \:Commentary<enter>
+    \NNj
     \:noh<enter>
 \'
 
-command! RunBlock execute 'normal!
+command! BlockRemove execute 'normal!
+    \/.*%%%%<enter>ndd
+    \NVNd
+    \:noh<enter>
+\'
+
+command! BlockRun execute 'normal!
     \/%%%%<enter>NVnn
     \:''<,''>!python -c "
         \import sys;
@@ -234,8 +231,6 @@ command! RunBlock execute 'normal!
         \exec(code);
         \print(separator);
     \"<enter>
-    \nnjVnk
-    \:Commentary<enter>
     \:noh<enter>
 \'
 
